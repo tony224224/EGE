@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тема 4. Условие Фано</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/prism.css">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1><span class="emoji">🌳</span>Условие Фано</h1>
+        <p>Построение бинарного дерева и наикратчайшего неравномерного кода</p>
+    </header>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="#principle">🔑 Принцип решения</a></li>
+            <li><a href="#problem">📋 Условие задачи</a></li>
+            <li><a href="#tree">🌳 Способ 1: Построение дерева</a></li>
+            <li><a href="#code">💻 Способ 2: Программная проверка</a></li>
+            <li><a href="#answer">✅ Ответ</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <section id="principle" class="section">
+            <h2><span class="emoji">🔑</span>Принцип решения — условие Фано</h2>
+
+            <p>Неравномерный код — это код, в котором разные символы кодируются последовательностями <strong>разной длины</strong>. Чтобы такой код можно было однозначно расшифровать без разделителей между кодовыми словами, он должен удовлетворять <strong>условию Фано</strong>.</p>
+
+            <div class="task-card">
+                <h4>Прямое условие Фано</h4>
+                <div class="solution">
+                    <p>Никакое кодовое слово не может являться <strong>началом (префиксом)</strong> какого-либо другого кодового слова.</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Обратное условие Фано</h4>
+                <div class="solution">
+                    <p>Никакое кодовое слово не может являться <strong>окончанием (суффиксом)</strong> какого-либо другого кодового слова.</p>
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>🔑 Ключевая идея:</strong> Удобнее всего проверять и строить код, удовлетворяющий прямому условию Фано, с помощью <strong>двоичного дерева</strong>: каждый бит 0 или 1 — это переход влево или вправо, а кодовое слово — это путь от корня до буквы. Если буква находится в узле дерева, то из этого узла <strong>не может выходить</strong> продолжение к другим буквам — иначе один код будет началом другого.
+                </div>
+
+            <div class="warning">
+                <strong>⚠️ Важно:</strong> Чтобы получить <strong>наименьшую суммарную длину кода</strong> для слова, самые короткие из ещё свободных кодовых слов нужно отдавать буквам, которые встречаются в слове <strong>чаще всего</strong>.
+            </div>
+        </section>
+
+        <section id="problem" class="section">
+            <h2><span class="emoji">📋</span>Условие задачи</h2>
+
+            <p>По каналу связи передаются сообщения, содержащие только буквы, входящие в слово <strong>ИНФОРМАТИКА</strong>. Для передачи используется неравномерный двоичный код, удовлетворяющий условию Фано: никакое кодовое слово не является началом другого. Это обеспечивает возможность однозначной расшифровки закодированных сообщений. Кодовые слова для некоторых букв известны: <strong>Ф — 010, Р — 011, М — 101, Т — 1101, К — 111</strong>.</p>
+
+            <div class="warning">
+                <strong>❓ Вопрос:</strong> Какое <strong>наименьшее</strong> число двоичных знаков может содержать код слова ИНФОРМАТИКА?
+            </div>
+
+            <h3>Буквы слова ИНФОРМАТИКА и их частота:</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Буква</th>
+                        <th>И</th>
+                        <th>Н</th>
+                        <th>Ф</th>
+                        <th>О</th>
+                        <th>Р</th>
+                        <th>М</th>
+                        <th>А</th>
+                        <th>Т</th>
+                        <th>К</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>Кол-во в слове</strong></td>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Код известен?</strong></td>
+                        <td>нет</td>
+                        <td>нет</td>
+                        <td>010</td>
+                        <td>нет</td>
+                        <td>011</td>
+                        <td>101</td>
+                        <td>нет</td>
+                        <td>1101</td>
+                        <td>111</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Всего в слове 11 букв. Для букв <strong>И, Н, О, А</strong> код неизвестен, его нужно достроить самим — так, чтобы весь код (вместе с уже известными словами) удовлетворял условию Фано, а суммарная длина кода слова была минимальной.</p>
+        </section>
+
+        <section id="tree" class="section">
+            <h2><span class="emoji">🌳</span>Способ 1: Построение дерева вручную</h2>
+
+            <div class="task-card">
+                <h4>Шаг 1. Отмечаем на дереве известные кодовые слова</h4>
+                <div class="solution">
+                    <p>Каждый известный код — это путь от корня: 0 — шаг влево, 1 — шаг вправо. Как только код заканчивается на букве, эта ветка дерева <strong>закрывается</strong> — дальше по ней идти нельзя (иначе нарушится условие Фано).</p>
+                </div>
+            </div>
+
+            <div class="table-container bin-tree-wrapper">
+                <svg class="bin-tree-svg" viewBox="0 0 916 494" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Двоичное дерево с известными кодовыми словами" xmlns="http://www.w3.org/2000/svg">
+                    <g class="edges">
+                        <line x1="381" y1="64" x2="150" y2="112"/>
+                        <line x1="150" y1="160" x2="66" y2="208"/>
+                        <line x1="150" y1="160" x2="234" y2="208"/>
+                        <line x1="234" y1="256" x2="178" y2="304"/>
+                        <line x1="234" y1="256" x2="290" y2="304"/>
+                        <line x1="381" y1="64" x2="612" y2="112"/>
+                        <line x1="612" y1="160" x2="458" y2="208"/>
+                        <line x1="458" y1="256" x2="402" y2="304"/>
+                        <line x1="458" y1="256" x2="514" y2="304"/>
+                        <line x1="612" y1="160" x2="766" y2="208"/>
+                        <line x1="766" y1="256" x2="682" y2="304"/>
+                        <line x1="682" y1="352" x2="626" y2="400"/>
+                        <line x1="682" y1="352" x2="738" y2="400"/>
+                        <line x1="766" y1="256" x2="850" y2="304"/>
+                    </g>
+                    <g class="badges">
+                        <g class="bit zero"><circle cx="265.5" cy="88" r="11"/><text x="265.5" y="88">0</text></g>
+                        <g class="bit zero"><circle cx="108" cy="184" r="11"/><text x="108" y="184">0</text></g>
+                        <g class="bit one"><circle cx="192" cy="184" r="11"/><text x="192" y="184">1</text></g>
+                        <g class="bit zero"><circle cx="206" cy="280" r="11"/><text x="206" y="280">0</text></g>
+                        <g class="bit one"><circle cx="262" cy="280" r="11"/><text x="262" y="280">1</text></g>
+                        <g class="bit one"><circle cx="496.5" cy="88" r="11"/><text x="496.5" y="88">1</text></g>
+                        <g class="bit zero"><circle cx="535" cy="184" r="11"/><text x="535" y="184">0</text></g>
+                        <g class="bit zero"><circle cx="430" cy="280" r="11"/><text x="430" y="280">0</text></g>
+                        <g class="bit one"><circle cx="486" cy="280" r="11"/><text x="486" y="280">1</text></g>
+                        <g class="bit one"><circle cx="689" cy="184" r="11"/><text x="689" y="184">1</text></g>
+                        <g class="bit zero"><circle cx="724" cy="280" r="11"/><text x="724" y="280">0</text></g>
+                        <g class="bit zero"><circle cx="654" cy="376" r="11"/><text x="654" y="376">0</text></g>
+                        <g class="bit one"><circle cx="710" cy="376" r="11"/><text x="710" y="376">1</text></g>
+                        <g class="bit one"><circle cx="808" cy="280" r="11"/><text x="808" y="280">1</text></g>
+                    </g>
+                    <g class="nodes">
+                        <g class="n-internal"><circle cx="381" cy="40" r="24"/><circle class="dot" cx="381" cy="40" r="4"/></g>
+                        <g class="n-internal"><circle cx="150" cy="136" r="24"/><circle class="dot" cx="150" cy="136" r="4"/></g>
+                        <g class="n-free"><rect x="25" y="208" width="82" height="48" rx="14"/><text class="lbl" x="66" y="228">00</text><text class="sub" x="66" y="245">свободно</text></g>
+                        <g class="n-internal"><circle cx="234" cy="232" r="24"/><circle class="dot" cx="234" cy="232" r="4"/></g>
+                        <g class="n-known"><circle cx="178" cy="328" r="24"/><text class="lbl" x="178" y="328">Ф</text><text class="code" x="178" y="372">010</text></g>
+                        <g class="n-known"><circle cx="290" cy="328" r="24"/><text class="lbl" x="290" y="328">Р</text><text class="code" x="290" y="372">011</text></g>
+                        <g class="n-internal"><circle cx="612" cy="136" r="24"/><circle class="dot" cx="612" cy="136" r="4"/></g>
+                        <g class="n-internal"><circle cx="458" cy="232" r="24"/><circle class="dot" cx="458" cy="232" r="4"/></g>
+                        <g class="n-free"><rect x="361" y="304" width="82" height="48" rx="14"/><text class="lbl" x="402" y="324">100</text><text class="sub" x="402" y="341">свободно</text></g>
+                        <g class="n-known"><circle cx="514" cy="328" r="24"/><text class="lbl" x="514" y="328">М</text><text class="code" x="514" y="372">101</text></g>
+                        <g class="n-internal"><circle cx="766" cy="232" r="24"/><circle class="dot" cx="766" cy="232" r="4"/></g>
+                        <g class="n-internal"><circle cx="682" cy="328" r="24"/><circle class="dot" cx="682" cy="328" r="4"/></g>
+                        <g class="n-free"><rect x="585" y="400" width="82" height="48" rx="14"/><text class="lbl" x="626" y="420">1100</text><text class="sub" x="626" y="437">свободно</text></g>
+                        <g class="n-known"><circle cx="738" cy="424" r="24"/><text class="lbl" x="738" y="424">Т</text><text class="code" x="738" y="468">1101</text></g>
+                        <g class="n-known"><circle cx="850" cy="328" r="24"/><text class="lbl" x="850" y="328">К</text><text class="code" x="850" y="372">111</text></g>
+                    </g>
+                </svg>
+                <p class="tree-legend">
+                    <span class="legend-item"><span class="swatch known"></span> — известная буква</span>
+                    <span class="legend-item"><span class="swatch free"></span> — свободная ветка</span>
+                    <span class="legend-item"><span class="swatch internal"></span> — промежуточный узел (ещё не буква)</span>
+                </p>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 2. Находим все свободные ветки дерева</h4>
+                <div class="solution">
+                    <p>Свободными (не занятыми буквами и не являющимися началом других кодов) остаются только три поддерева:</p>
+                    <ul>
+                        <li><span class="code">00</span> — свободно на глубине <strong>2</strong></li>
+                        <li><span class="code">100</span> — свободно на глубине <strong>3</strong></li>
+                        <li><span class="code">1100</span> — свободно на глубине <strong>4</strong></li>
+                    </ul>
+                    <p>Нам нужно разместить <strong>4 буквы</strong> (И, Н, О, А), а свободных веток пока только 3.</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 3. Разбиваем одну ветку, чтобы получить 4-е место</h4>
+                <div class="solution">
+                    <p>Если использовать ветку <span class="code">00</span> целиком как одну букву (длина 2), то у нас останется только 3 свободных места — недостаточно для 4 букв.</p>
+                    <p>Поэтому <strong>разбиваем</strong> ветку <span class="code">00</span> на два продолжения — <span class="code">000</span> и <span class="code">001</span> (длина 3 каждое). Так мы жертвуем одним коротким кодом (длиной 2), но получаем взамен два кода длиной 3 — это выгодно, так как у нас целых <strong>две буквы с частотой 2</strong> (И и А), которым нужны короткие коды.</p>
+                    <p>Итог: свободные кодовые слова — <span class="code">000</span>, <span class="code">001</span>, <span class="code">100</span> (длина 3) и <span class="code">1100</span> (длина 4).</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 4. Раздаём короткие коды самым частым буквам</h4>
+                <div class="solution">
+                    <p>Самые частые буквы — <strong>И</strong> и <strong>А</strong> (по 2 раза), им отдаём два кода длины 3. Из оставшихся букв <strong>Н</strong> и <strong>О</strong> (по 1 разу) одной достаётся третий код длины 3, а другой — единственный оставшийся код длины 4. Так как частоты у Н и О одинаковы, порядок между ними не важен.</p>
+                </div>
+            </div>
+
+            <h3>Итоговое дерево с расставленными буквами:</h3>
+            <div class="table-container bin-tree-wrapper">
+                <svg class="bin-tree-svg" viewBox="0 0 1028 494" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Итоговое двоичное дерево кодов" xmlns="http://www.w3.org/2000/svg">
+                    <g class="edges">
+                        <line x1="479" y1="64" x2="234" y2="112"/>
+                        <line x1="234" y1="160" x2="122" y2="208"/>
+                        <line x1="122" y1="256" x2="66" y2="304"/>
+                        <line x1="122" y1="256" x2="178" y2="304"/>
+                        <line x1="234" y1="160" x2="346" y2="208"/>
+                        <line x1="346" y1="256" x2="290" y2="304"/>
+                        <line x1="346" y1="256" x2="402" y2="304"/>
+                        <line x1="479" y1="64" x2="724" y2="112"/>
+                        <line x1="724" y1="160" x2="570" y2="208"/>
+                        <line x1="570" y1="256" x2="514" y2="304"/>
+                        <line x1="570" y1="256" x2="626" y2="304"/>
+                        <line x1="724" y1="160" x2="878" y2="208"/>
+                        <line x1="878" y1="256" x2="794" y2="304"/>
+                        <line x1="794" y1="352" x2="738" y2="400"/>
+                        <line x1="794" y1="352" x2="850" y2="400"/>
+                        <line x1="878" y1="256" x2="962" y2="304"/>
+                    </g>
+                    <g class="badges">
+                        <g class="bit zero"><circle cx="356.5" cy="88" r="11"/><text x="356.5" y="88">0</text></g>
+                        <g class="bit zero"><circle cx="178" cy="184" r="11"/><text x="178" y="184">0</text></g>
+                        <g class="bit zero"><circle cx="94" cy="280" r="11"/><text x="94" y="280">0</text></g>
+                        <g class="bit one"><circle cx="150" cy="280" r="11"/><text x="150" y="280">1</text></g>
+                        <g class="bit one"><circle cx="290" cy="184" r="11"/><text x="290" y="184">1</text></g>
+                        <g class="bit zero"><circle cx="318" cy="280" r="11"/><text x="318" y="280">0</text></g>
+                        <g class="bit one"><circle cx="374" cy="280" r="11"/><text x="374" y="280">1</text></g>
+                        <g class="bit one"><circle cx="601.5" cy="88" r="11"/><text x="601.5" y="88">1</text></g>
+                        <g class="bit zero"><circle cx="647" cy="184" r="11"/><text x="647" y="184">0</text></g>
+                        <g class="bit zero"><circle cx="542" cy="280" r="11"/><text x="542" y="280">0</text></g>
+                        <g class="bit one"><circle cx="598" cy="280" r="11"/><text x="598" y="280">1</text></g>
+                        <g class="bit one"><circle cx="801" cy="184" r="11"/><text x="801" y="184">1</text></g>
+                        <g class="bit zero"><circle cx="836" cy="280" r="11"/><text x="836" y="280">0</text></g>
+                        <g class="bit zero"><circle cx="766" cy="376" r="11"/><text x="766" y="376">0</text></g>
+                        <g class="bit one"><circle cx="822" cy="376" r="11"/><text x="822" y="376">1</text></g>
+                        <g class="bit one"><circle cx="920" cy="280" r="11"/><text x="920" y="280">1</text></g>
+                    </g>
+                    <g class="nodes">
+                        <g class="n-internal"><circle cx="479" cy="40" r="24"/><circle class="dot" cx="479" cy="40" r="4"/></g>
+                        <g class="n-internal"><circle cx="234" cy="136" r="24"/><circle class="dot" cx="234" cy="136" r="4"/></g>
+                        <g class="n-internal"><circle cx="122" cy="232" r="24"/><circle class="dot" cx="122" cy="232" r="4"/></g>
+                        <g class="n-assigned"><circle cx="66" cy="328" r="24"/><text class="lbl" x="66" y="328">И</text><text class="code" x="66" y="372">000</text></g>
+                        <g class="n-assigned"><circle cx="178" cy="328" r="24"/><text class="lbl" x="178" y="328">А</text><text class="code" x="178" y="372">001</text></g>
+                        <g class="n-internal"><circle cx="346" cy="232" r="24"/><circle class="dot" cx="346" cy="232" r="4"/></g>
+                        <g class="n-known"><circle cx="290" cy="328" r="24"/><text class="lbl" x="290" y="328">Ф</text><text class="code" x="290" y="372">010</text></g>
+                        <g class="n-known"><circle cx="402" cy="328" r="24"/><text class="lbl" x="402" y="328">Р</text><text class="code" x="402" y="372">011</text></g>
+                        <g class="n-internal"><circle cx="724" cy="136" r="24"/><circle class="dot" cx="724" cy="136" r="4"/></g>
+                        <g class="n-internal"><circle cx="570" cy="232" r="24"/><circle class="dot" cx="570" cy="232" r="4"/></g>
+                        <g class="n-assigned"><circle cx="514" cy="328" r="24"/><text class="lbl" x="514" y="328">Н</text><text class="code" x="514" y="372">100</text></g>
+                        <g class="n-known"><circle cx="626" cy="328" r="24"/><text class="lbl" x="626" y="328">М</text><text class="code" x="626" y="372">101</text></g>
+                        <g class="n-internal"><circle cx="878" cy="232" r="24"/><circle class="dot" cx="878" cy="232" r="4"/></g>
+                        <g class="n-internal"><circle cx="794" cy="328" r="24"/><circle class="dot" cx="794" cy="328" r="4"/></g>
+                        <g class="n-assigned"><circle cx="738" cy="424" r="24"/><text class="lbl" x="738" y="424">О</text><text class="code" x="738" y="468">1100</text></g>
+                        <g class="n-known"><circle cx="850" cy="424" r="24"/><text class="lbl" x="850" y="424">Т</text><text class="code" x="850" y="468">1101</text></g>
+                        <g class="n-known"><circle cx="962" cy="328" r="24"/><text class="lbl" x="962" y="328">К</text><text class="code" x="962" y="372">111</text></g>
+                    </g>
+                </svg>
+                <p class="tree-legend">
+                    <span class="legend-item"><span class="swatch known"></span> — известная буква (дана в условии)</span>
+                    <span class="legend-item"><span class="swatch assigned"></span> — буква, которую достроили сами</span>
+                </p>
+            </div>
+
+            <h3>Итоговая таблица кодов:</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Буква</th>
+                        <th>Код</th>
+                        <th>Длина</th>
+                        <th>Кол-во в слове</th>
+                        <th>Вклад в длину</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><strong>Ф</strong></td><td><span class="code">010</span></td><td>3</td><td>1</td><td>3</td></tr>
+                    <tr><td><strong>Р</strong></td><td><span class="code">011</span></td><td>3</td><td>1</td><td>3</td></tr>
+                    <tr><td><strong>М</strong></td><td><span class="code">101</span></td><td>3</td><td>1</td><td>3</td></tr>
+                    <tr><td><strong>Т</strong></td><td><span class="code">1101</span></td><td>4</td><td>1</td><td>4</td></tr>
+                    <tr><td><strong>К</strong></td><td><span class="code">111</span></td><td>3</td><td>1</td><td>3</td></tr>
+                    <tr><td><strong>И</strong></td><td><span class="code">000</span></td><td>3</td><td>2</td><td>6</td></tr>
+                    <tr><td><strong>А</strong></td><td><span class="code">001</span></td><td>3</td><td>2</td><td>6</td></tr>
+                    <tr><td><strong>Н</strong></td><td><span class="code">100</span></td><td>3</td><td>1</td><td>3</td></tr>
+                    <tr><td><strong>О</strong></td><td><span class="code">1100</span></td><td>4</td><td>1</td><td>4</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="success">
+                <h4>✅ Проверка условия Фано:</h4>
+                <p>Все 9 кодовых слов — <span class="code">010, 011, 101, 1101, 111, 000, 001, 100, 1100</span> — расположены в разных, не вложенных друг в друга ветках дерева, поэтому ни одно из них не является началом другого.</p>
+            </div>
+        </section>
+    </main>
+
+    <a href="#" id="backToTop" class="back-to-top" title="Вернуться в начало">↑</a>
+</div>
+
+<style>
+    .content-image {
+        max-width: 100%;
+        height: auto;
+        margin: 15px auto;
+        display: block;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-to-top {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #3498db;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        text-decoration: none;
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s ease;
+    }
+
+    .back-to-top.visible {
+        display: block;
+    }
+
+    .back-to-top:hover {
+        background: #2980b9;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    pre {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        line-height: 1.5;
+    }
+
+    code {
+        font-family: 'Courier New', monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.95em;
+    }
+
+    pre code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .section ul {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .section ul li {
+        margin-bottom: 8px;
+        line-height: 1.7;
+    }
+
+    /* === BINARY TREE (SVG) === */
+    .bin-tree-wrapper {
+        background: linear-gradient(180deg, #ffffff 0%, #f7fafc 100%);
+        border: 1px solid var(--border-medium, #dee2e6);
+        border-radius: 14px;
+        padding: 18px 18px 14px;
+        overflow-x: auto;
+        margin: 20px 0;
+    }
+
+    .bin-tree-svg {
+        display: block;
+        width: 100%;
+        min-width: 620px;
+        height: auto;
+        font-family: var(--font-main);
+        overflow: visible;
+    }
+
+    .bin-tree-svg text {
+        text-anchor: middle;
+        dominant-baseline: central;
+    }
+
+    .bin-tree-svg .edges line {
+        stroke: #cbd6de;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+    }
+
+    .bin-tree-svg .bit circle {
+        fill: #ffffff;
+        stroke: #b0bec5;
+        stroke-width: 2;
+    }
+
+    .bin-tree-svg .bit text {
+        font-size: 12px;
+        font-weight: 700;
+        fill: #5b6b7a;
+    }
+
+    .bin-tree-svg .bit.one circle {
+        fill: var(--secondary-light, #34495e);
+        stroke: var(--secondary-light, #34495e);
+    }
+
+    .bin-tree-svg .bit.one text {
+        fill: #ffffff;
+    }
+
+    .bin-tree-svg .n-internal circle {
+        fill: #f4f7f9;
+        stroke: #cbd6de;
+        stroke-width: 2;
+    }
+
+    .bin-tree-svg .n-internal .dot {
+        fill: #b6c4ce;
+        stroke: none;
+    }
+
+    .bin-tree-svg .lbl {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .bin-tree-svg .code {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        font-weight: 600;
+        fill: #7f8c8d;
+        letter-spacing: 0.5px;
+    }
+
+    .bin-tree-svg .n-known circle {
+        fill: #eaf4fc;
+        stroke: var(--primary, #3498db);
+        stroke-width: 2.5;
+    }
+
+    .bin-tree-svg .n-known .lbl {
+        fill: #1f6ea8;
+    }
+
+    .bin-tree-svg .n-assigned circle {
+        fill: #eafaf1;
+        stroke: var(--success, #27ae60);
+        stroke-width: 2.5;
+    }
+
+    .bin-tree-svg .n-assigned .lbl {
+        fill: #1e8449;
+    }
+
+    .bin-tree-svg .n-free rect {
+        fill: #fef9e7;
+        stroke: var(--warning, #f39c12);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+    }
+
+    .bin-tree-svg .n-free .lbl {
+        font-family: var(--font-mono);
+        font-size: 15px;
+        font-weight: 700;
+        fill: #b9770e;
+    }
+
+    .bin-tree-svg .n-free .sub {
+        font-size: 11px;
+        fill: #c9932a;
+    }
+
+    .tree-legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px 22px;
+        margin-top: 14px;
+        font-size: 0.9rem;
+        color: var(--text-muted, #555);
+    }
+
+    .tree-legend .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .swatch {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #cbd6de;
+        background: #f4f7f9;
+        flex: none;
+    }
+
+    .swatch.known {
+        background: #eaf4fc;
+        border-color: var(--primary, #3498db);
+    }
+
+    .swatch.assigned {
+        background: #eafaf1;
+        border-color: var(--success, #27ae60);
+    }
+
+    .swatch.free {
+        background: #fef9e7;
+        border-color: var(--warning, #f39c12);
+        border-style: dashed;
+        border-radius: 5px;
+    }
+</style>
+
+<script>
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    document.getElementById('backToTop').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.style.background = '';
+            if (link.getAttribute('href') === '#' + current) {
+                link.style.background = '#3498db';
+            }
+        });
+    });
+</script>
+<script src="../assets/js/prism.js"></script>
+</body>
+</html>

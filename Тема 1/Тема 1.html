@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тема 1. Поиск соответствия между графом и таблицей</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/prism.css">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1><span class="emoji">🔗</span>Поиск соответствия между графом и таблицей</h1>
+        <p>Пример решения задания программированием</p>
+    </header>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="#problem">📋 Условие задачи</a></li>
+            <li><a href="#principle">🔑 Принцип решения</a></li>
+            <li><a href="#manual">🧠 Способ 1: Устное решение</a></li>
+            <li><a href="#code">💻 Способ 2: Программное решение</a></li>
+            <li><a href="#explanation">💡 Пояснения</a></li>
+            <li><a href="#answer">✅ Ответ</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <section id="problem" class="section">
+            <h2><span class="emoji">📋</span>Условие задачи</h2>
+
+            <p>На рисунке схема дорог изображена в виде <strong>графа</strong>, в таблице содержатся сведения о длине этих дорог в километрах.</p>
+
+            <p>Так как таблицу и схему рисовали независимо друг от друга, <strong>нумерация населённых пунктов в таблице никак не связана с буквенными обозначениями на графе</strong>. Известно, что дорога <span class="code">CD</span> длиннее дороги <span class="code">EF</span>.</p>
+
+            <p><strong>Определите сумму длин дорог АB и AG.</strong></p>
+
+            <div class="example-box">
+                <h4>📸 Визуальное представление:</h4>
+                <img src="../assets/images/img_type1_1.png" alt="Граф дорог" class="content-image" onerror="this.style.display='none';">
+                <img src="../assets/images/img_type1_2.png" alt="Таблица расстояний" class="content-image" onerror="this.style.display='none';">
+            </div>
+        </section>
+
+        <section id="principle" class="section">
+            <h2><span class="emoji">🔑</span>Принцип решения</h2>
+
+            <p>Так как нумерация в таблице никак не связана с буквами на графе напрямую, перебирать все 8! = 40 320 вариантов вручную бессмысленно. Вместо этого используем <strong>инвариант, который не зависит от переименования вершин</strong> — <strong>степень вершины</strong> (количество дорог, выходящих из пункта).</p>
+
+            <div class="task-card">
+                <h4>Что такое таблица и граф?</h4>
+                <div class="solution">
+                    <p><strong>Таблица</strong> содержит расстояния между 8 пунктами (обозначены цифрами 1-8)</p>
+                    <p><strong>Граф</strong> показывает связи между 8 пунктами (обозначены буквами A-H) и дороги между ними</p>
+                    <p>Нам нужно найти, какой цифре соответствует какая буква</p>
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>🔑 Ключевая идея:</strong> Если у вершины на графе, например, 3 дороги, то и соответствующая ей вершина в таблице обязана иметь ровно 3 заполненные ячейки (3 дороги) — переименование вершин не меняет их степень.
+            </div>
+
+            <h3>Степени вершин на графе:</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Вершина</th>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>C</th>
+                        <th>D</th>
+                        <th>E</th>
+                        <th>F</th>
+                        <th>G</th>
+                        <th>H</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>Степень</strong></td>
+                        <td>7</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>2</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ Ключевое ограничение:</strong> Дорога CD длиннее дороги EF — это дополнительное условие поможет разрешить оставшуюся неоднозначность в конце решения!
+            </div>
+
+            <h3>Общий алгоритм решения:</h3>
+            <ul>
+                <li><strong>1. Степени:</strong> Считаем степень каждой буквы на графе и каждой цифры в таблице</li>
+                <li><strong>2. Сопоставление по степени:</strong> Вершины с одинаковой (и тем более уникальной) степенью — кандидаты на соответствие</li>
+                <li><strong>3. Уточнение по соседям:</strong> Там, где степеней недостаточно, смотрим на степени соседних вершин</li>
+                <li><strong>4. Фильтрация:</strong> Из оставшихся вариантов выбираем тот, где CD &gt; EF</li>
+                <li><strong>5. Вычисление:</strong> Находим сумму длин дорог AB и AG</li>
+            </ul>
+        </section>
+
+        <section id="manual" class="section">
+            <h2><span class="emoji">🧠</span>Способ 1: Устное решение (по степеням вершин)</h2>
+
+            <p>Этот способ не требует программирования — достаточно посчитать степени вершин и внимательно сопоставить их.</p>
+
+            <div class="task-card">
+                <h4>Шаг 1. Считаем степени цифр в таблице</h4>
+                <div class="solution">
+                    <p>Степень цифры — это количество заполненных ячеек в её строке/столбце таблицы:</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Пункт</th>
+                        <th>П1</th>
+                        <th>П2</th>
+                        <th>П3</th>
+                        <th>П4</th>
+                        <th>П5</th>
+                        <th>П6</th>
+                        <th>П7</th>
+                        <th>П8</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>Связи</strong></td>
+                        <td>П2, П7</td>
+                        <td>П1, П7, П8</td>
+                        <td>П4, П5, П7</td>
+                        <td>П3, П7</td>
+                        <td>П3, П7</td>
+                        <td>П7, П8</td>
+                        <td>П1-П6, П8</td>
+                        <td>П2, П6, П7</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Степень</strong></td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>7</td>
+                        <td>3</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 2. Находим вершину A — единственную степени 7</h4>
+                <div class="solution">
+                    <p>На графе только <strong>A</strong> соединена со всеми остальными вершинами (степень 7). В таблице только у <strong>П7</strong> степень 7.</p>
+                    <p>➡️ <strong>A = П7</strong></p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 3. Находим вершину C среди трёх вершин степени 3</h4>
+                <div class="solution">
+                    <p>На графе степень 3 имеют <strong>C, F, G</strong>. У таблицы степень 3 имеют <strong>П2, П3, П8</strong>.</p>
+                    <p>Смотрим на "соседей, кроме A":</p>
+                    <ul>
+                        <li><strong>C</strong> кроме A соединена с <strong>B</strong> и <strong>D</strong> — а у них обеих степень 2, и между собой B и D <em>не</em> соединены</li>
+                        <li><strong>F</strong> кроме A соединена с <strong>E</strong> (степень 2) и <strong>G</strong> (степень 3)</li>
+                        <li><strong>G</strong> кроме A соединена с <strong>F</strong> (степень 3) и <strong>H</strong> (степень 2)</li>
+                    </ul>
+                    <p>Значит, C — единственная вершина степени 3, у которой оба "неглавных" соседа имеют степень 2. Проверяем таблицу: у <strong>П3</strong> кроме П7 соседи — <strong>П4</strong> и <strong>П5</strong> (степень 2 у обеих).</p>
+                    <p>➡️ <strong>C = П3</strong>, а значит <strong>{B, D} = {П4, П5}</strong> (порядок пока не известен)</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 4. Оставшиеся F и G — вершины, соединённые между собой</h4>
+                <div class="solution">
+                    <p>Остаются <strong>П2</strong> и <strong>П8</strong> для <strong>F</strong> и <strong>G</strong>. На графе F и G соединены напрямую — и в таблице <strong>П2 и П8 тоже соединены</strong> (это единственная связь между двумя оставшимися вершинами степени 3), что подтверждает соответствие.</p>
+                    <p>У F есть ещё сосед E (степень 2), у G — сосед H (степень 2). В таблице П2 связан с П1, а П8 — с П6.</p>
+                    <p>➡️ Либо <strong>(F=П2, E=П1, G=П8, H=П6)</strong>, либо <strong>(F=П8, E=П6, G=П2, H=П1)</strong></p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 5. Снимаем неоднозначность условием CD &gt; EF</h4>
+                <div class="solution">
+                    <p>Осталось 2 варианта для (F,G,E,H) × 2 варианта для (B,D) = 4 комбинации. Проверяем расстояние <strong>CD</strong> (П3–?) и <strong>EF</strong> (?–?) по таблице для каждой:</p>
+                    <ul>
+                        <li>D = П5 → CD = П3–П5 = 12; D = П4 → CD = П3–П4 = 16</li>
+                        <li>Ветка 1 (E=П1, F=П2) → EF = П1–П2 = 17; Ветка 2 (E=П6, F=П8) → EF = П6–П8 = 15</li>
+                    </ul>
+                    <p>Условию <strong>CD &gt; EF</strong> удовлетворяет только пара <strong>CD = 16 &gt; EF = 15</strong>, то есть <strong>D = П4</strong> (а значит <strong>B = П5</strong>) и <strong>ветка 2</strong> (F = П8, E = П6, G = П2, H = П1).</p>
+                </div>
+            </div>
+
+            <div class="success">
+                <h4>✅ Итоговое соответствие:</h4>
+                <div style="font-family: 'Courier New', monospace; background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    A=П7&nbsp;&nbsp;B=П5&nbsp;&nbsp;C=П3&nbsp;&nbsp;D=П4&nbsp;&nbsp;E=П6&nbsp;&nbsp;F=П8&nbsp;&nbsp;G=П2&nbsp;&nbsp;H=П1
+                </div>
+                <p><strong>AB</strong> = П7–П5 = 38 км, <strong>AG</strong> = П7–П2 = 29 км ⟹ <strong>38 + 29 = 67</strong></p>
+            </div>
+        </section>
+
+        <section id="code" class="section">
+            <h2><span class="emoji">💻</span>Способ 2: Программное решение</h2>
+
+            <p>Тот же принцип (совпадение структуры связей) можно проверить автоматически перебором всех перестановок букв — так надёжнее, если вручную сложно отследить все связи.</p>
+
+            <div class="task-card">
+                <h4>Python решение:</h4>
+                <div class="solution">
+                    <div class="pre-code">
+<pre class="line-numbers match-braces" data-download-link><code class="language-python">from itertools import permutations
+
+table = '12 17 21 27 28 34 35 37 43 47 53 57 67 68 71 72 73 74 75 76 78 82 86 87'
+graph = 'AB BA AC CA AD DA BC CB CD DC AE EA AF FA AG GA AH HA EF FE FG GF GH HG'
+
+for p in permutations('ABCDEFGH'):
+    new_graph = table
+    for i in range(1, 9):
+        new_graph = new_graph.replace(str(i), p[i - 1])
+    if set(new_graph.split()) == set(graph.split()):
+        print(p)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Объяснение кода:</h3>
+            <ul>
+                <li><strong>table:</strong> Строка, где первая цифра - номер строки, вторая - номер столбца ячейки со значением</li>
+                <li><strong>graph:</strong> Строка с дорогами на графе в виде пар букв (AB означает дорогу от A к B)</li>
+                <li><strong>permutations('ABCDEFGH'):</strong> Генерирует все возможные перестановки букв (каждой букве соответствует позиция от 1 до 8)</li>
+                <li><strong>replace(str(i), p[i - 1]):</strong> Заменяем цифру i на букву p[i-1]</li>
+                <li><strong>set(new_graph.split()) == set(graph.split()):</strong> Проверяем, совпадает ли набор дорог</li>
+            </ul>
+        </section>
+
+        <section id="explanation" class="section">
+            <h2><span class="emoji">💡</span>Пояснения результатов</h2>
+
+            <p>После запуска кода получаем несколько подходящих перестановок (они соответствуют структурной симметрии графа — паре B/D и паре ветвей E-F / G-H). Из них нужно выбрать те, которые удовлетворяют условию <strong>CD &gt; EF</strong>.</p>
+
+            <div class="success">
+                <h4>✅ Результаты перебора:</h4>
+                <div style="font-family: 'Courier New', monospace; background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <code>('E', 'F', 'C', 'B', 'D', 'H', 'A', 'G')</code><br>
+                    <code>('E', 'F', 'C', 'D', 'B', 'H', 'A', 'G')</code><br>
+                    <code>('H', 'G', 'C', 'B', 'D', 'E', 'A', 'F')</code><br>
+                    <code>('H', 'G', 'C', 'D', 'B', 'E', 'A', 'F')</code>
+                </div>
+            </div>
+
+            <h3>Таблица соответствия цифр буквам (подходящий вариант):</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Позиция</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>7</th>
+                        <th>8</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>Буква</strong></td>
+                        <td>H</td>
+                        <td>G</td>
+                        <td>C</td>
+                        <td>D</td>
+                        <td>B</td>
+                        <td>E</td>
+                        <td>A</td>
+                        <td>F</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="task-card">
+                <h4>Проверка условия CD &gt; EF:</h4>
+                <div class="solution">
+                    <p>Для каждого из 4 вариантов вычисляем CD и EF по таблице расстояний и оставляем только тот, где CD &gt; EF:</p>
+                    <ul>
+                        <li><code>('E','F','C','B','D','H','A','G')</code>: CD = П3-П5 = 12, EF = П1-П2 = 17 — не подходит</li>
+                        <li><code>('E','F','C','D','B','H','A','G')</code>: CD = П3-П4 = 16, EF = П1-П2 = 17 — не подходит</li>
+                        <li><code>('H','G','C','B','D','E','A','F')</code>: CD = П3-П5 = 12, EF = П6-П8 = 15 — не подходит</li>
+                        <li><code>('H','G','C','D','B','E','A','F')</code>: CD = П3-П4 = <strong>16</strong>, EF = П6-П8 = <strong>15</strong> — <strong>16 &gt; 15 ✅ подходит!</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="answer" class="section">
+            <h2><span class="emoji">✅</span>Итоговый ответ</h2>
+
+            <div class="success">
+                <h4>Найденные дороги:</h4>
+                <div class="solution">
+                    <p><strong>AB:</strong> A = П7, B = П5 ⟹ П7-П5 = <strong>38</strong> км</p>
+                    <p><strong>AG:</strong> A = П7, G = П2 ⟹ П7-П2 = <strong>29</strong> км</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Вычисление суммы:</h3>
+                <p style="font-size: 1.2rem; text-align: center; padding: 20px; background: #e3f2fd; border-radius: 8px; margin: 15px 0;">
+                    <strong>AB + AG = 38 + 29 = <span style="color: #1976d2; font-size: 1.4rem;">67</span></strong>
+                </p>
+            </div>
+
+            <div class="warning">
+                <strong>📌 Ответ:</strong> <strong>67 км</strong>
+            </div>
+        </section>
+    </main>
+
+    <a href="#" id="backToTop" class="back-to-top" title="Вернуться в начало">↑</a>
+</div>
+
+<style>
+    .content-image {
+        max-width: 100%;
+        height: auto;
+        margin: 15px auto;
+        display: block;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-to-top {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #3498db;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        text-decoration: none;
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s ease;
+    }
+
+    .back-to-top.visible {
+        display: block;
+    }
+
+    .back-to-top:hover {
+        background: #2980b9;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    pre {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        line-height: 1.5;
+    }
+
+    code {
+        font-family: 'Courier New', monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.95em;
+    }
+
+    pre code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .section ul {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .section ul li {
+        margin-bottom: 8px;
+        line-height: 1.7;
+    }
+</style>
+
+<script>
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    document.getElementById('backToTop').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.style.background = '';
+            if (link.getAttribute('href') === '#' + current) {
+                link.style.background = '#3498db';
+            }
+        });
+    });
+</script>
+<script src="../assets/js/prism.js"></script>
+</body>
+</html>
