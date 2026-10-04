@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тема 7. Измерение информации</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/prism.css">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1><span class="emoji">📏</span>Измерение информации</h1>
+        <p>Единицы измерения информации и формулы для расчёта объёма данных</p>
+    </header>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="#units">🧮 Единицы измерения</a></li>
+            <li><a href="#hartley">🔢 Формула Хартли</a></li>
+            <li><a href="#text">🔤 Текстовая информация</a></li>
+            <li><a href="#image">🖼️ Графическая информация</a></li>
+            <li><a href="#audio">🔊 Звуковая информация</a></li>
+            <li><a href="#example">🎯 Пример решения</a></li>
+            <li><a href="#explanation">💡 Пояснения</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <section id="units" class="section">
+            <h2><span class="emoji">🧮</span>Единицы измерения информации</h2>
+
+            <p>Для измерения информации используют специальные единицы измерения.</p>
+
+            <div class="success">
+                <strong>Бит</strong> — минимальная единица измерения информации.
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Единица измерения</th>
+                        <th>Равна</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1 байт (б)</td>
+                        <td>8 бит (Б)</td>
+                    </tr>
+                    <tr>
+                        <td>1 килобайт (Кб)</td>
+                        <td>1024 байта (б)</td>
+                    </tr>
+                    <tr>
+                        <td>1 мегабайт (Mб)</td>
+                        <td>1024 килобайта (Кб)</td>
+                    </tr>
+                    <tr>
+                        <td>1 гигабайт (Гб)</td>
+                        <td>1024 мегабайта (Мб)</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ Внимание:</strong> В задачах ЕГЭ по умолчанию используется именно степень двойки (1 Кб = 1024 б), а не 1000, если явно не указано иное.
+            </div>
+        </section>
+
+        <section id="hartley" class="section">
+            <h2><span class="emoji">🔢</span>Общая формула (Формула Хартли)</h2>
+
+            <div class="example-box" style="text-align: center; padding: 20px; background: #f9f9f9; border-left: 4px solid #3498db; margin: 15px 0; border-radius: 8px;">
+                <p style="font-size: 1.4em; font-family: 'Courier New', monospace;">
+                    <strong>N = 2<sup>i</sup></strong>
+                </p>
+            </div>
+
+            <ul>
+                <li><strong>N</strong> — мощность алфавита. Количество различных элементов, из которых может состоять информация.</li>
+                <li><strong>i</strong> — объём (в битах), отводимый на одну единицу информации.</li>
+            </ul>
+
+            <h3>Python-функции для расчёта</h3>
+
+            <div class="task-card">
+                <h4>Расчёт по формуле Хартли:</h4>
+                <div class="solution">
+                    <div class="pre-code">
+<pre class="line-numbers match-braces" data-download-link><code class="language-python">from math import log2, ceil
+
+# Найти мощность алфавита N по известному i
+i = 8
+N = 2 ** i
+print(N)  # 256
+
+# Найти количество бит i по известному N
+N = 256
+i = log2(N)
+print(i)  # 8.0
+
+# Если N не является степенью двойки, i округляют вверх
+N = 200
+i = ceil(log2(N))
+print(i)  # 8</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="text" class="section">
+            <h2><span class="emoji">🔤</span>Текстовая информация</h2>
+
+            <p>Текстовая информация состоит из <strong>символов</strong>. Пробелы и знаки препинания — это тоже символы.</p>
+
+            <div class="example-box" style="text-align: center; padding: 20px; background: #f9f9f9; border-left: 4px solid #3498db; margin: 15px 0; border-radius: 8px;">
+                <p style="font-size: 1.4em; font-family: 'Courier New', monospace;">
+                    <strong>V = l &middot; i</strong>
+                </p>
+            </div>
+
+            <ul>
+                <li><strong>l</strong> — длина текста (в символах).</li>
+                <li><strong>i</strong> — объём (в битах), отводимый на один символ.</li>
+            </ul>
+
+            <div class="task-card">
+                <h4>Python-код для расчёта объёма текста:</h4>
+                <div class="solution">
+                    <div class="pre-code">
+<pre class="line-numbers match-braces" data-download-link><code class="language-python">l = 1024  # длина текста в символах
+i = 8     # бит на символ (256 символов алфавита)
+
+V_bit = l * i
+V_byte = V_bit / 8
+print(V_bit, 'бит')
+print(V_byte, 'байт')</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="image" class="section">
+            <h2><span class="emoji">🖼️</span>Графическая информация</h2>
+
+            <p>Изображение на экране формируется из <strong>пикселей</strong>.</p>
+
+            <div class="example-box" style="text-align: center; padding: 20px; background: #f9f9f9; border-left: 4px solid #3498db; margin: 15px 0; border-radius: 8px;">
+                <p style="font-size: 1.4em; font-family: 'Courier New', monospace;">
+                    <strong>V = w &middot; h &middot; i</strong>
+                </p>
+            </div>
+
+            <ul>
+                <li><strong>w</strong> — ширина изображения (в пикселях).</li>
+                <li><strong>h</strong> — высота изображения (в пикселях).</li>
+                <li><strong>i</strong> — объём (в битах), отводимый на один пиксель (глубина цвета).</li>
+            </ul>
+
+            <div class="task-card">
+                <h4>Python-код для расчёта объёма изображения:</h4>
+                <div class="solution">
+                    <div class="pre-code">
+<pre class="line-numbers match-braces" data-download-link><code class="language-python">w = 1920  # ширина в пикселях
+h = 1080  # высота в пикселях
+i = 24    # бит на пиксель (True Color)
+
+V_bit = w * h * i
+V_byte = V_bit / 8
+V_mb = V_byte / 1024 / 1024
+print(V_bit, 'бит')
+print(V_byte, 'байт')
+print(round(V_mb, 2), 'Мбайт')</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="audio" class="section">
+            <h2><span class="emoji">🔊</span>Звуковая информация</h2>
+
+            <p>Звук — это волна, которая имеет амплитуду и частоту колебаний.</p>
+
+            <div class="example-box" style="text-align: center; padding: 20px; background: #f9f9f9; border-left: 4px solid #3498db; margin: 15px 0; border-radius: 8px;">
+                <p style="font-size: 1.4em; font-family: 'Courier New', monospace;">
+                    <strong>V = k &middot; d &middot; t &middot; i</strong>
+                </p>
+            </div>
+
+            <ul>
+                <li><strong>k</strong> — количество каналов (1 — моно, 2 — стерео, 4 — квадро и т.д).</li>
+                <li><strong>d</strong> — частота дискретизации (в Гц).</li>
+                <li><strong>t</strong> — время звучания (в секундах).</li>
+                <li><strong>i</strong> — разрешение (глубина кодирования звука, в битах).</li>
+            </ul>
+
+            <div class="task-card">
+                <h4>Python-код для расчёта объёма звукового файла:</h4>
+                <div class="solution">
+                    <div class="pre-code">
+<pre class="line-numbers match-braces" data-download-link><code class="language-python">k = 2       # стерео
+d = 44100   # частота дискретизации, Гц
+t = 180     # время звучания, сек
+i = 16      # разрешение, бит
+
+V_bit = k * d * t * i
+V_byte = V_bit / 8
+V_mb = V_byte / 1024 / 1024
+print(V_bit, 'бит')
+print(V_byte, 'байт')
+print(round(V_mb, 2), 'Мбайт')</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="example" class="section">
+            <h2><span class="emoji">🎯</span>Пример решения задачи</h2>
+
+            <h3>Условие задачи</h3>
+
+            <p>Растровое изображение размером <strong>192 на 960</strong> пикселей занимает <strong>90 Кбайт</strong> памяти без учёта заголовка файла. Известно, что для кодирования цвета каждого пикселя используется одинаковое количество бит. <strong>Какое максимальное количество цветов можно использовать в изображении?</strong></p>
+
+            <h3>Способ 1: Устное решение</h3>
+
+            <div class="task-card">
+                <h4>Шаг 1. Переводим объём файла в биты</h4>
+                <div class="solution">
+                    <p>90 Кбайт = 90 &times; 1024 байта = 92 160 байт = 92 160 &times; 8 = 737 280 бит.</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 2. Считаем количество пикселей</h4>
+                <div class="solution">
+                    <p>192 &times; 960 = 184 320 пикселей.</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 3. Находим глубину цвета i</h4>
+                <div class="solution">
+                    <p>По формуле V = w &middot; h &middot; i выражаем i = V / (w &middot; h):</p>
+                    <p>i = 737 280 / 184 320 = 4 бита на пиксель.</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Шаг 4. Находим количество цветов по формуле Хартли</h4>
+                <div class="solution">
+                    <p>N = 2<sup>i</sup> = 2<sup>4</sup> = 16.</p>
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>📌 Ответ (Способ 1):</strong> максимальное количество цветов равно <strong>16</strong>.
+            </div>
+
+            <h3>Способ 2: Программное решение</h3>
+
+            <div class="task-card">
+                <h4>Python-код:</h4>
+                <div class="solution">
+                    <div class="pre-code">
+<pre class="line-numbers match-braces" data-download-link><code class="language-python">w = 192      # ширина изображения, пикс.
+h = 960      # высота изображения, пикс.
+V_kb = 90    # объём файла, Кбайт
+
+V_bit = V_kb * 1024 * 8       # объём файла в битах
+i = V_bit // (w * h)          # бит на пиксель
+N = 2 ** i                    # максимальное кол-во цветов
+
+print(f'i = {i} бит')
+print(f'N = {N} цветов')</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success">
+                <p><strong>Программа выведет:</strong></p>
+                <div style="font-family: 'Courier New', monospace; background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <code>i = 4 бит</code><br>
+                    <code>N = 16 цветов</code>
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>📌 Ответ (Способ 2):</strong> <strong>16</strong>
+            </div>
+        </section>
+
+        <section id="explanation" class="section">
+            <h2><span class="emoji">💡</span>Ключевые моменты при решении</h2>
+
+            <div class="task-card">
+                <h4>1️⃣ Направление формулы</h4>
+                <div class="solution">
+                    <p>Одну и ту же формулу можно применять в обе стороны: если известен объём V и размеры (w, h или l, или k, d, t), можно найти глубину кодирования i. И наоборот — зная i, можно найти объём V.</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>2️⃣ Единицы измерения</h4>
+                <div class="solution">
+                    <p>Перед подстановкой в формулу все величины нужно привести к одной системе единиц (обычно — к битам). Не забывайте, что 1 Кбайт = 1024 байта = 8192 бита.</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>3️⃣ Округление i</h4>
+                <div class="solution">
+                    <p>Так как на кодирование одного элемента всегда отводится <strong>целое</strong> число бит, при вычислении i через логарифм результат округляют <strong>вверх</strong> (в большую сторону), если он не является целым числом.</p>
+                </div>
+            </div>
+
+            <div class="success">
+                <h3>✅ Алгоритм решения любой задачи на измерение информации</h3>
+                <ol>
+                    <li>Определите тип информации (текст, графика, звук) и выберите нужную формулу</li>
+                    <li>Переведите все известные величины в единые единицы измерения (биты)</li>
+                    <li>Выразите неизвестную величину из формулы</li>
+                    <li>Если находите глубину кодирования i через логарифм — округлите результат вверх</li>
+                    <li>При необходимости примените формулу Хартли N = 2<sup>i</sup>, чтобы найти количество цветов/символов/уровней</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <a href="#" id="backToTop" class="back-to-top" title="Вернуться в начало">↑</a>
+</div>
+
+<style>
+    .content-image {
+        max-width: 100%;
+        height: auto;
+        margin: 15px auto;
+        display: block;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-to-top {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #3498db;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        text-decoration: none;
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s ease;
+    }
+
+    .back-to-top.visible {
+        display: block;
+    }
+
+    .back-to-top:hover {
+        background: #2980b9;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    pre {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        line-height: 1.5;
+    }
+
+    code {
+        font-family: 'Courier New', monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.95em;
+    }
+
+    pre code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .section ul {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .section ul li {
+        margin-bottom: 8px;
+        line-height: 1.7;
+    }
+
+    .section ol {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .section ol li {
+        margin-bottom: 10px;
+        line-height: 1.7;
+    }
+</style>
+
+<script>
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    document.getElementById('backToTop').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.style.background = '';
+            if (link.getAttribute('href') === '#' + current) {
+                link.style.background = '#3498db';
+            }
+        });
+    });
+</script>
+<script src="../assets/js/prism.js"></script>
+</body>
+</html>
