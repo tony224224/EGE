@@ -1,4 +1,4 @@
-answer = 'M35'
+answer = 35
 
 #
 
