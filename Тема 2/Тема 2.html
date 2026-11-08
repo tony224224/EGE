@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тема 2. Логические функции и таблицы истинности</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/prism.css">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1><span class="emoji">🔀</span>Логические функции и таблицы истинности</h1>
+        <p>Определение соответствия переменных в логической функции</p>
+    </header>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="#operations">📐 Операции</a></li>
+            <li><a href="#example1">🎯 Способ 1: Прямой перебор</a></li>
+            <li><a href="#example2">🎯 Способ 2: Полный расчет</a></li>
+            <li><a href="#explanation">💡 Пояснения</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <section id="operations" class="section">
+            <h2><span class="emoji">📐</span>Таблица соответствия логических операций</h2>
+
+            <p>Логические операции в задачах ЕГЭ записываются математическими символами. В Python они имеют другие обозначения:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Математический символ</th>
+                        <th>Описание</th>
+                        <th>Python оператор</th>
+                        <th>Пример</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>→</strong></td>
+                        <td>Импликация (если...то)</td>
+                        <td><span class="code">&lt;=</span></td>
+                        <td><span class="code">A &lt;= B</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>≡</strong></td>
+                        <td>Эквивалентность (равносильность)</td>
+                        <td><span class="code">==</span></td>
+                        <td><span class="code">A == B</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>∨</strong></td>
+                        <td>Дизъюнкция (ИЛИ)</td>
+                        <td><span class="code">or</span></td>
+                        <td><span class="code">A or B</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>∧</strong></td>
+                        <td>Конъюнкция (И)</td>
+                        <td><span class="code">and</span></td>
+                        <td><span class="code">A and B</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>¬</strong></td>
+                        <td>Отрицание (НЕ)</td>
+                        <td><span class="code">not</span></td>
+                        <td><span class="code">not A</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="success">
+                <strong>💡 Совет:</strong> Запомните эти соответствия — они используются во всех задачах на логику!
+            </div>
+        </section>
+
+        <section id="example1" class="section">
+            <h2><span class="emoji">🎯</span>Способ 1: Прямой перебор значений</h2>
+
+            <h3>Условие задачи</h3>
+
+            <p>Логическая функция <strong>F</strong> задаётся выражением:</p>
+
+            <div class="example-box" style="text-align: center; padding: 20px; background: #f9f9f9; border-left: 4px solid #3498db; margin: 15px 0; border-radius: 8px;">
+                <p style="font-size: 1.2em; font-family: 'Courier New', monospace;">
+                    <strong>F = (¬z ≡ y) → ((w ∧ ¬x) ≡ (y ∧ x))</strong>
+                </p>
+            </div>
+
+            <p>Ниже приведён <strong>частично заполненный фрагмент таблицы истинности</strong> функции F, содержащий неповторяющиеся строки. Определите, какому столбцу таблицы истинности функции F соответствует каждая из переменных <strong>x, y, z, w</strong>.</p>
+
+            <h3>Таблица истинности (частичная)</h3>
+
+            <div class="table-container">
+                <table style="margin: 20px auto;">
+                    <thead>
+                    <tr>
+                        <th style="width: 15%;">Переменная 1</th>
+                        <th style="width: 15%;">Переменная 2</th>
+                        <th style="width: 15%;">Переменная 3</th>
+                        <th style="width: 15%;">Переменная 4</th>
+                        <th style="width: 15%;">F</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td style="background: #fff3cd;"></td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td style="background: #d4edda; font-weight: bold;">0</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td style="background: #fff3cd;"></td>
+                        <td style="background: #fff3cd;"></td>
+                        <td style="background: #d4edda; font-weight: bold;">0</td>
+                    </tr>
+                    <tr>
+                        <td style="background: #fff3cd;"></td>
+                        <td style="background: #fff3cd;"></td>
+                        <td>0</td>
+                        <td style="background: #fff3cd;"></td>
+                        <td style="background: #d4edda; font-weight: bold;">0</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Код решения (Способ 1)</h3>
+
+            <div class="task-card">
+                <h4>Простой перебор всех возможных значений:</h4>
+                <div class="solution">
+                    <div class="pre-code">
+<pre class="line-numbers match-braces" data-download-link><code class="language-python">print('x y z w')
+for x in range(2):
+    for y in range(2):
+        for z in range(2):
+            for w in range(2):
+                # Функция возвращает 0 в условии задачи, 
+                # поэтому всё выражение помещаем под not
+                if not((not(z) == y) <= ((w and not(x)) == (y and x))):
+                    print(x, y, z, w)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Результат выполнения</h3>
+
+            <div class="success">
+                <p><strong>Программа выведет таблицу значений:</strong></p>
+                <div style="font-family: 'Courier New', monospace; background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <code>x y z w</code><br>
+                    <code>0 0 1 1</code><br>
+                    <code>0 1 0 1</code><br>
+                    <code>1 1 0 0</code><br>
+                    <code>1 1 0 1</code>
+                </div>
+            </div>
+
+            <h3>Анализ полученных значений</h3>
+
+            <p>Из полученной таблицы нужно найти соответствие между переменными и их позициями в исходной таблице истинности:</p>
+
+            <ul>
+                <li>Ищем строки, которые соответствуют условиям в задаче</li>
+                <li>Сопоставляем позиции переменных в полученной таблице с заданными строками</li>
+                <li>Определяем, какая переменная какому столбцу соответствует</li>
+            </ul>
+
+            <div class="warning">
+                <strong>📌 Ответ (Способ 1):</strong> <strong>zwxy</strong> (порядок столбцов)
+            </div>
+        </section>
+
+        <section id="example2" class="section">
+            <h2><span class="emoji">🎯</span>Способ 2: Полный расчет с перестановками</h2>
+
+            <p>Этот способ <strong>автоматически находит правильный ответ</strong> без ручного анализа таблицы.</p>
+
+            <h3>Как это работает</h3>
+
+            <ul>
+                <li><strong>Генерируем все возможные значения неизвестных битов</strong> в таблице истинности</li>
+                <li><strong>Проверяем, что все строки уникальны</strong> (неповторяющиеся)</li>
+                <li><strong>Перебираем все перестановки переменных</strong> (24 варианта: 4! = 24)</li>
+                <li><strong>Для каждой перестановки</strong> проверяем, верна ли логическая функция для всех строк</li>
+                <li><strong>Выводим правильное соответствие</strong> переменных столбцам</li>
+            </ul>
+
+            <h3>Код решения (Способ 2)</h3>
+
+            <div class="task-card">
+                <h4>Автоматический расчет с перестановками:</h4>
+                <div class="solution">
+                    <div class="pre-code">
+<pre class="line-numbers match-braces" data-download-link><code class="language-python">from itertools import product, permutations
+
+
+def f1(x, y, z, w):
+    return 1 if (not (z) == y) <= ((w and not (x)) == (y and x)) else 0
+
+
+for a0, a1, a2, a3, a4, a5 in product((0, 1), repeat=6):
+    s = [(a0, 1, 1, 1, 0),
+         (1, 1, a1, a2, 0),
+         (a3, a4, 0, a5, 0)]
+    if len(set(s)) == len(s):
+        for x, y, z, w in permutations((0, 1, 2, 3)):
+            if all([f1(i[x], i[y], i[z], i[w]) == i[-1] for i in s]):
+                print(f'x = {x + 1}; y = {y + 1}; z = {z + 1}; w = {w + 1}')
+                break</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Объяснение сложного кода</h3>
+
+            <div class="example-box">
+                <h4>Разбор строк кода:</h4>
+                <ul>
+                    <li><strong>product((0, 1), repeat=6)</strong> — генерирует все 64 комбинации 6-ти неизвестных битов (a0-a5)</li>
+                    <li><strong>s = [(a0, 1, 1, 1, 0), ...]</strong> — создаёт таблицу с подставленными значениями и известной F=0</li>
+                    <li><strong>len(set(s)) == len(s)</strong> — проверяет, что все строки уникальны (нет дубликатов)</li>
+                    <li><strong>permutations((0, 1, 2, 3))</strong> — генерирует все 24 способа расставить переменные x, y, z, w по позициям 0, 1, 2, 3</li>
+                    <li><strong>all([f1(...) == i[-1] for i in s])</strong> — проверяет, что функция верна для всех строк таблицы</li>
+                    <li><strong>print(f'x = {x + 1}...')</strong> — выводит ответ: позиции переменных (номера столбцов)</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <strong>📌 Преимущества способа 2:</strong>
+                <ul>
+                    <li>✅ Автоматически находит ответ</li>
+                    <li>✅ Не требует ручного анализа таблицы</li>
+                    <li>✅ Проверяет все возможные комбинации</li>
+                    <li>✅ Гарантирует правильность результата</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="explanation" class="section">
+            <h2><span class="emoji">💡</span>Ключевые моменты при решении</h2>
+
+            <h3>Важные правила</h3>
+
+            <div class="task-card">
+                <h4>1️⃣ Преобразование логических выражений</h4>
+                <div class="solution">
+                    <p>Логическое выражение нужно точно перевести из математической нотации в Python:</p>
+                    <ul>
+                        <li>¬ (отрицание) → <span class="code">not</span></li>
+                        <li>∧ (И) → <span class="code">and</span></li>
+                        <li>∨ (ИЛИ) → <span class="code">or</span></li>
+                        <li>→ (импликация) → <span class="code">&lt;=</span></li>
+                        <li>≡ (эквивалентность) → <span class="code">==</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>2️⃣ Скобочки и приоритет операций</h4>
+                <div class="solution">
+                    <p>В Python действует приоритет операций:</p>
+                    <ul>
+                        <li>1️⃣ <strong>not</strong> (отрицание)</li>
+                        <li>2️⃣ <strong>and</strong> (конъюнкция)</li>
+                        <li>3️⃣ <strong>or</strong> (дизъюнкция)</li>
+                        <li>4️⃣ <strong>&lt;=</strong> (импликация)</li>
+                        <li>5️⃣ <strong>==</strong> (эквивалентность)</li>
+                    </ul>
+                    <p><strong>Совет:</strong> Всегда ставьте скобки явно, чтобы не ошибиться!</p>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>3️⃣ Функция возвращает 0 или 1?</h4>
+                <div class="solution">
+                    <p>Если в задаче F = 0, то условие в if нужно обернуть в <span class="code">not()</span>:</p>
+                    <p><span class="code">if not(выражение):</span> — ищем строки, где функция равна 0</p>
+                    <p><span class="code">if выражение:</span> — ищем строки, где функция равна 1</p>
+                </div>
+            </div>
+
+            <div class="success">
+                <h3>✅ Алгоритм решения любой задачи на логику</h3>
+                <ol>
+                    <li>Переведите логическую функцию из математической нотации в Python</li>
+                    <li>Выберите способ решения (способ 1 для анализа или способ 2 для автоматизации)</li>
+                    <li>Запустите код и получите результаты</li>
+                    <li>Проверьте ответ подстановкой значений в исходное выражение</li>
+                    <li>Запишите соответствие переменных столбцам</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <a href="#" id="backToTop" class="back-to-top" title="Вернуться в начало">↑</a>
+</div>
+
+<style>
+    .content-image {
+        max-width: 100%;
+        height: auto;
+        margin: 15px auto;
+        display: block;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-to-top {
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #3498db;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        text-decoration: none;
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s ease;
+    }
+
+    .back-to-top.visible {
+        display: block;
+    }
+
+    .back-to-top:hover {
+        background: #2980b9;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    pre {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        line-height: 1.5;
+    }
+
+    code {
+        font-family: 'Courier New', monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.95em;
+    }
+
+    pre code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .section ul {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .section ul li {
+        margin-bottom: 8px;
+        line-height: 1.7;
+    }
+
+    .section ol {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .section ol li {
+        margin-bottom: 10px;
+        line-height: 1.7;
+    }
+</style>
+
+<script>
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    document.getElementById('backToTop').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.style.background = '';
+            if (link.getAttribute('href') === '#' + current) {
+                link.style.background = '#3498db';
+            }
+        });
+    });
+</script>
+<script src="../assets/js/prism.js"></script>
+</body>
+</html>
